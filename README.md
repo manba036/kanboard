@@ -15,6 +15,14 @@ Kanboard is project management software that focuses on the Kanban methodology.
     - [Upgrade to a new version](https://docs.kanboard.org/en/latest/admin_guide/upgrade.html)
     - [Use Kanboard with Docker](https://docs.kanboard.org/en/latest/admin_guide/docker.html)
 
+manba036
+-------
+
+```bash
+make docker-image
+docker-compose up -d
+```
+
 Credits
 -------
 
