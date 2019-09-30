@@ -24,3 +24,6 @@ web.config
 assets/css/src
 assets/vendor
 ssl/*
+mysql/*
+.env
+db-mysql.sql

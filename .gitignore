@@ -23,3 +23,6 @@ data/config.php
 !docker/var/wwww/app/config.php
 node_modules
 ssl/
+mysql/
+.env
+db-mysql.sql

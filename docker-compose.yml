@@ -1,11 +1,52 @@
 version: '2'
 services:
   kanboard:
-    image: kanboard/kanboard:master
+    container_name: kanboard
+    build:
+      context: .
+      args:
+        - VERSION=${VERSION}
+        - DB_RUN_MIGRATIONS=${DB_RUN_MIGRATIONS}
+        - DB_DRIVER=${DB_DRIVER}
+        - DB_USERNAME=${DB_USERNAME}
+        - DB_PASSWORD=${DB_PASSWORD}
+        - DB_HOSTNAME=db
+        - MAIL_FROM=${MAIL_FROM}
+        - MAIL_TRANSPORT=${MAIL_TRANSPORT}
+        - MAIL_SMTP_HOSTNAME=${MAIL_SMTP_HOSTNAME}
+        - MAIL_SMTP_PORT=${MAIL_SMTP_PORT}
+        - MAIL_SMTP_USERNAME=${MAIL_SMTP_USERNAME}
+        - MAIL_SMTP_PASSWORD=${MAIL_SMTP_PASSWORD}
+        - MAIL_SMTP_ENCRYPTION=${MAIL_SMTP_ENCRYPTION}
     ports:
-     - "80:80"
-     - "443:443"
+      - "80:80"
+      - "443:443"
     volumes:
-     - ./data:/var/www/app/data
-     - ./plugins:/var/www/app/plugins
-     - ./ssl:/etc/nginx/ssl
+      - ./data:/var/www/app/data
+      - ./plugins:/var/www/app/plugins
+      - ./ssl:/etc/nginx/ssl
+    environment:
+      - DATABASE_URL=mysql://${DB_USERNAME}:${DB_PASSWORD}@db/kanboard
+    restart: always
+  db:
+    container_name: db
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+      - ./data:/data
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=kanboard
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    restart: always
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8000:80"
+    links:
+      - db
+    restart: always
